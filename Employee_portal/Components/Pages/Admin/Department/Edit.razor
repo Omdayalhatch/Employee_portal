@@ -1,0 +1,84 @@
+﻿@page "/Department/Edit/{Id:int}"
+
+@using EmployeePortal.Application.Interface.IService
+@using EmployeeProtal.Application.DTO
+@using EmployeeProtal.Application.Interface.IService
+
+@inject IDepartmentService DepartmentService
+@inject NavigationManager Nav
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-warning">
+            <h4>Edit Department</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (model == null)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+
+                <EditForm Model="model" OnValidSubmit="Update">
+
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="mb-3">
+
+                        <label class="form-label">Department Name</label>
+
+                        <InputText class="form-control"
+                                   @bind-Value="model.DepartmentName" />
+
+                    </div>
+
+                    <button class="btn btn-warning me-2" type="submit">
+                        Update
+                    </button>
+
+                    <button class="btn btn-secondary"
+                            type="button"
+                            @onclick="Back">
+                        Cancel
+                    </button>
+
+                </EditForm>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@code {
+
+    [Parameter] public int Id { get; set; }
+
+    private DepartmentDTO? model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await DepartmentService.GetByIdAsync(Id);
+    }
+
+    async Task Update()
+    {
+        await DepartmentService.UpdateAsync(model!);
+        Nav.NavigateTo("/Department");
+    }
+
+    void Back()
+    {
+        Nav.NavigateTo("/Department");
+    }
+
+}

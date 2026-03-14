@@ -1,0 +1,245 @@
+﻿@page "/Employee/Edit/{Id:int}"
+
+@using EmployeePortal.Application.Interface.IService
+@using EmployeeProtal.Application.DTO
+@using EmployeeProtal.Application.Interface.IService
+
+@inject IEmployeeService EmployeeService
+@inject IDepartmentService DepartmentService
+@inject IUserService UserService
+@inject NavigationManager Nav
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Edit Employee</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (isLoading)
+            {
+                <div class="text-center">
+                    <div class="spinner-border text-primary"></div>
+                    <p>Loading Employee...</p>
+                </div>
+            }
+            else
+            {
+
+                <EditForm Model="model" OnValidSubmit="Update">
+
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">First Name</label>
+
+                            <InputText class="form-control"
+                                       @bind-Value="model.FirstName" />
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Last Name</label>
+
+                            <InputText class="form-control"
+                                       @bind-Value="model.LastName" />
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Contact</label>
+
+                            <InputText class="form-control"
+                                       @bind-Value="model.Contact" />
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Gender</label>
+
+                            <InputSelect class="form-select"
+                                         @bind-Value="model.Gender">
+
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+
+                            </InputSelect>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Department</label>
+
+                            <InputSelect class="form-select"
+                                         @bind-Value="model.DepartmentId">
+
+                                <option value="">Select Department</option>
+
+                                @foreach (var d in departments)
+                                {
+                                    <option value="@d.Id">@d.DepartmentName</option>
+                                }
+
+                            </InputSelect>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">User</label>
+
+                            <InputSelect class="form-select"
+                                         @bind-Value="model.UserId">
+
+                                <option value="">Select User</option>
+
+                                @foreach (var u in users)
+                                {
+                                    <option value="@u.Id">@u.UserName</option>
+                                }
+
+                            </InputSelect>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Date Of Birth</label>
+
+                            <InputDate class="form-control"
+                                       @bind-Value="model.DateofBirth" />
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Joining Date</label>
+
+                            <InputDate class="form-control"
+                                       @bind-Value="model.JoiningDate" />
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label">Address</label>
+
+                            <InputTextArea class="form-control"
+                                           @bind-Value="model.Address" />
+
+                        </div>
+
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label">Profile Image URL</label>
+
+                            <InputText class="form-control"
+                                       placeholder="Enter image url"
+                                       @bind-Value="model.Profile" />
+
+                        </div>
+
+
+                        @if (!string.IsNullOrEmpty(model.Profile))
+                        {
+                            <div class="text-center mb-3">
+
+                                <img src="@model.Profile"
+                                     style="height:150px;border-radius:10px;box-shadow:0 0 8px gray;" />
+
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="mt-3">
+
+                        <button class="btn btn-success me-2" type="submit">
+                            Update Employee
+                        </button>
+
+                        <button class="btn btn-secondary"
+                                type="button"
+                                @onclick="Back">
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </EditForm>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    EmployeeDTO model = new();
+
+    List<DepartmentDTO> departments = new();
+    List<UserDTO> users = new();
+
+    bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await EmployeeService.GetByIdAsync(Id);
+
+        departments = (await DepartmentService.GetAllAsync()).ToList();
+
+        users = await UserService.GetAllUsersAsync();
+
+        isLoading = false;
+    }
+
+
+    async Task Update()
+    {
+        try
+        {
+            await EmployeeService.UpdateAsync(model);
+
+            Nav.NavigateTo("/Employee");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    void Back()
+    {
+        Nav.NavigateTo("/Employee");
+    }
+
+}

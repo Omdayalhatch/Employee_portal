@@ -1,0 +1,209 @@
+﻿@page "/Dashboard"
+@using EmployeePortal.Infrastucture.Data
+@using EmployeeProtal.Domain.Entities
+@using Microsoft.EntityFrameworkCore
+
+@inject AppDbContext Db
+
+<div class="dashboard-content p-4">
+
+    <div class="greeting mb-4 p-4 bg-white rounded shadow-sm">
+        <h2>Hello Admin 👋</h2>
+        <p class="text-muted mb-0">
+            Welcome back to your Employee Management Dashboard
+        </p>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card bg-primary">
+                <i class="bi bi-people card-icon"></i>
+                <div>
+                    <h6>Total Employees</h6>
+                    <h3>@totalEmployees</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card bg-success">
+                <i class="bi bi-building card-icon"></i>
+                <div>
+                    <h6>Total Departments</h6>
+                    <h3>@totalDepartments</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card bg-dark">
+                <i class="bi bi-person-badge card-icon"></i>
+                <div>
+                    <h6>Total Users</h6>
+                    <h3>@totalUsers</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card bg-danger">
+                <i class="bi bi-calendar-x card-icon"></i>
+                <div>
+                    <h6>Leave Requests</h6>
+                    <h3>@totalLeaves</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+                    <h6 class="mb-0">Recent Employees</h6>
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-sm">
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Joining</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var e in recentEmployees)
+                            {
+                                <tr>
+                                    <td>@e.FirstName @e.LastName</td>
+                                    <td>@e.Department?.DepartmentName</td>
+                                    <td>@e.JoiningDate.ToShortDateString()</td>
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+                    <h6 class="mb-0">Latest Leave Requests</h6>
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-sm">
+
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>From</th>
+                                <th>To</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var l in recentLeaves)
+                            {
+                                <tr>
+                                    <td>@l.Employee?.FirstName</td>
+                                    <td>@l.FromDate.ToShortDateString()</td>
+                                    <td>@l.ToDate.ToShortDateString()</td>
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    .dashboard-content {
+        background: #f5f7fb;
+        min-height: 90vh;
+    }
+
+    .dashboard-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        transition: .3s;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,.15);
+        }
+
+    .card-icon {
+        font-size: 35px;
+    }
+
+</style>
+
+
+@code {
+
+    int totalEmployees;
+    int totalDepartments;
+    int totalUsers;
+    int totalLeaves;
+    List<EmployeeProtal.Domain.Entities.Employee> recentEmployees = new();
+    List<LeaveRequest> recentLeaves = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        totalEmployees = await Db.Employees.CountAsync();
+        totalDepartments = await Db.Departments.CountAsync();
+        totalUsers = await Db.Users.CountAsync();
+        totalLeaves = await Db.LeaveRequests.CountAsync();
+
+        recentEmployees = await Db.Employees
+        .Include(e => e.Department)
+        .OrderByDescending(e => e.Id)
+        .Take(5)
+        .ToListAsync();
+
+        recentLeaves = await Db.LeaveRequests
+        .Include(l => l.Employee)
+        .OrderByDescending(l => l.Id)
+        .Take(5)
+        .ToListAsync();
+
+    }
+
+}

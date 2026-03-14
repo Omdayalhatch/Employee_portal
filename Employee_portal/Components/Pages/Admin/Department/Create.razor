@@ -1,0 +1,67 @@
+﻿@page "/Department/Create"
+
+@using EmployeePortal.Application.Interface.IService
+@using EmployeeProtal.Application.DTO
+@using EmployeeProtal.Application.Interface.IService
+
+@inject IDepartmentService DepartmentService
+@inject NavigationManager Nav
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-success text-white">
+            <h4>Add Department</h4>
+        </div>
+
+        <div class="card-body">
+
+            <EditForm Model="model" OnValidSubmit="Save">
+
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+
+                    <label class="form-label">Department Name</label>
+
+                    <InputText class="form-control"
+                               @bind-Value="model.DepartmentName" />
+
+                </div>
+
+                <button class="btn btn-success me-2" type="submit">
+                    Save
+                </button>
+
+                <button class="btn btn-secondary"
+                        type="button"
+                        @onclick="Back">
+                    Cancel
+                </button>
+
+            </EditForm>
+
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    private DepartmentDTO model = new();
+
+    async Task Save()
+    {
+        await DepartmentService.CreateAsync(model);
+        Nav.NavigateTo("/Department");
+    }
+
+    void Back()
+    {
+        Nav.NavigateTo("/Department");
+    }
+
+}
