@@ -47,12 +47,6 @@
 
             <input type="password" class="form-control mb-2" placeholder="Password" @bind="password" />
 
-            <select class="form-control mb-2" @bind="roleId">
-                <option value="1">Admin</option>
-                <option value="2">User</option>
-                <option value="3">HR</option>
-            </select>
-
             <button class="btn btn-success w-100" @onclick="HandleRegister">
                 Register
             </button>
@@ -74,7 +68,7 @@
     private string email = "";
     private string password = "";
     private string message = "";
-    private int roleId = 2;
+      private int roleId = 5;
 
 
     private void SetTab(int value)
@@ -97,9 +91,9 @@
 
             if (result != null)
             {
-                if (result. RoleId == 1 )
+                if (result. RoleId == 4 )
                     Navigation.NavigateTo("/Dashboard");
-                else if (result.RoleId == 3)
+                else if (result.RoleId == 6)
                     Navigation.NavigateTo("/HR-Dashboard");
                 else
                     Navigation.NavigateTo("/User-Dashboard");

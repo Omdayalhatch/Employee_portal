@@ -1,66 +1,100 @@
 .sidebar {
-    width: 240px;
+    width: 200px;
     height: 100vh;
-    background: linear-gradient(180deg,#5b54d6,#4b43c7);
+    background: linear-gradient(180deg, #4a8af9, #9c7fd9);
     color: white;
-    padding: 20px 10px;
+    padding: 20px 12px;
     display: flex;
     flex-direction: column;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
 }
 
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 600;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 700;
     padding: 10px 15px;
+    margin-bottom: 10px;
 }
 
 .logo-icon {
     background: #ff7a59;
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
 }
+
 
 
 .menu {
-    margin-top: 40px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .menu-title {
-    font-size: 12px;
-    opacity: 0.7;
-    margin: 15px 10px 5px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin: 18px 12px 6px;
 }
+
+
 
 .menu-item {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px 18px;
-    border-radius: 10px;
-    color: #e6e6ff;
+    border-radius: 12px;
+    color: #e9e9ff;
     text-decoration: none;
-    transition: 0.2s;
+    font-size: 15px;
+    transition: all 0.3s ease;
 }
 
 
+
     .menu-item:hover {
-        background: rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.15);
+        transform: translateX(5px);
     }
+
 
 
     .menu-item.active {
         background: white;
-        color: #4b43c7;
+        color: #4c3fd9;
         font-weight: 600;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    .nav-text {
-        color: black;
+
+
+    .menu-item i {
+        font-size: 18px;
     }
+
+.logout {
+    margin-top: auto;
+    padding: 10px;
+}
+
+.logout-btn {
+    background: rgba(255,255,255,0.1);
+}
+
+    .logout-btn:hover {
+        background: #ff4d4f;
+        color: white;
+    }
+
+    .nev-text{
+    color:  black;
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmployeePortal.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace EmployeeProtal.Domain.Entities
         public string Address { get; set; } = "";
         public int DepartmentId { get; set; }
         public Department? Department { get; set; }
+        public decimal Salary { get; set; }
         public DateTime JoiningDate { get; set; } = DateTime.Now;
         public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
         public ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();

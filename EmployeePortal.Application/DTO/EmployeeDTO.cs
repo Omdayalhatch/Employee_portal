@@ -9,6 +9,7 @@ namespace EmployeeProtal.Application.DTO
     public class EmployeeDTO
     {
         public int Id { get; set; }
+        public string EmployeeCode { get; set; } = "";
         public string Email { get; set; } = "";
         public string FirstName { get; set; } = "";
         public string? LastName { get; set; }
@@ -20,6 +21,7 @@ namespace EmployeeProtal.Application.DTO
         public int UserId { get; set; }
         public string UserName { get; set; } = "";
         public int DepartmentId { get; set; }
+        public decimal Salary { get; set; }
         public string DepartmentName { get; set; } = "";
         public DateTime JoiningDate { get; set; } = DateTime.Now;
     }

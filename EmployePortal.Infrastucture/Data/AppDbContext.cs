@@ -1,4 +1,5 @@
 ﻿
+using EmployeePortal.Domain.Entities;
 using EmployeeProtal.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,6 +23,7 @@ namespace EmployeePortal.Infrastucture.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Salary> Salaries{ get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Designation> Designations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +47,7 @@ namespace EmployeePortal.Infrastucture.Data
                 .HasOne(u => u.Role)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId);
+
         }
     }
 }

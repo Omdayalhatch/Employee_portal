@@ -4,58 +4,15 @@
     overflow: hidden;
 }
 
-/* Sidebar */
-
-.sidebar {
-    width: 240px;
-    background: #1f2937;
-    color: white;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Sidebar Logo */
-
-.logo {
-    padding: 18px;
-    font-size: 18px;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Sidebar Links */
-
-.sidebar .nav-link {
-    color: #d1d5db;
-    padding: 12px 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-radius: 6px;
-}
-
-    .sidebar .nav-link:hover {
-        background: #374151;
-        color: white;
-    }
-
-    .sidebar .nav-link.active {
-        background: #2563eb;
-        color: white;
-    }
-
-/* Main Area */
-
 .main {
-    flex: 1;
+    flex: 100;
     display: flex;
     flex-direction: column;
 }
 
-/* Top Navbar */
 
 .top-navbar {
-    height: 60px;
+    height: 40px;
     background: white;
     border-bottom: 1px solid #e5e7eb;
     display: flex;
@@ -64,7 +21,6 @@
     padding: 0 20px;
 }
 
-/* Right Side */
 
 .right {
     display: flex;
@@ -72,13 +28,11 @@
     align-items: center;
 }
 
-/* User */
 
 .user {
     font-weight: 600;
 }
 
-/* Content Area */
 
 .content {
     flex: 1;

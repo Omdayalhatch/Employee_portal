@@ -21,6 +21,7 @@ namespace Employee_portal.Service
             {
                 Id = x.Id,
                 UserName = x.Username,
+                
             }).ToList();
         }
 
@@ -40,6 +41,7 @@ namespace Employee_portal.Service
                 RoleId = user.RoleId,
                 RoleName = user.Role.RoleName,
                 Token = "JWT Token Here"
+                
             };
 
         }

@@ -18,7 +18,8 @@ namespace Employee_portal.Service
         {
             var dept = new Department
             {
-                DepartmentName = dto.DepartmentName
+                DepartmentName = dto.DepartmentName,
+                CreatedDate = dto.CreatedDate,
             };
 
             var result = await _repo.AddAsync(dept);
@@ -26,7 +27,8 @@ namespace Employee_portal.Service
             return new DepartmentDTO
             {
                 Id = result.Id,
-                DepartmentName = result.DepartmentName
+                DepartmentName = result.DepartmentName,
+                CreatedDate = result.CreatedDate,
             };
         }
 
@@ -41,7 +43,8 @@ namespace Employee_portal.Service
             return list.Select(d => new DepartmentDTO
             {
                 Id = d.Id,
-                DepartmentName = d.DepartmentName
+                DepartmentName = d.DepartmentName,
+                CreatedDate = d.CreatedDate,
             });
         }
 
@@ -52,7 +55,8 @@ namespace Employee_portal.Service
             return new DepartmentDTO
             {
                 Id = d.Id,
-                DepartmentName = d.DepartmentName
+                DepartmentName = d.DepartmentName,
+                CreatedDate = d.CreatedDate,
             };
         }
 
@@ -70,7 +74,8 @@ namespace Employee_portal.Service
             return new DepartmentDTO
             {
                 Id = existing.Id,
-                DepartmentName = existing.DepartmentName
+                DepartmentName = existing.DepartmentName,
+                CreatedDate = existing.CreatedDate,
             };
         }
     }

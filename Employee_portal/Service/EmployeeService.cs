@@ -32,6 +32,7 @@ namespace Employee_protal.Service
                 Profile = dto.Profile,
                 Gender = dto.Gender,
                 Contact = dto.Contact,
+                Salary = dto.Salary,
                 DateofBirth = dto.DateofBirth,
                 DepartmentId = dto.DepartmentId,
                 JoiningDate = dto.JoiningDate,
@@ -70,6 +71,7 @@ namespace Employee_protal.Service
                 Profile = e.Profile,
                 Gender = e.Gender,
                 UserId = e.UserId,
+                Salary = e.Salary,
                 UserName = e.User?.Username ?? "Unknown",
                 Contact = e.Contact,
                 DateofBirth = e.DateofBirth,
@@ -95,6 +97,7 @@ namespace Employee_protal.Service
                 UserId = e.UserId,
                 UserName = e.User?.Username ?? "Unknown",
                 Contact = e.Contact,
+                Salary = e.Salary,
                 DateofBirth = e.DateofBirth,
                 DepartmentId = e.DepartmentId,
                 DepartmentName = e.Department?.DepartmentName ?? "Unknown",
@@ -119,6 +122,7 @@ namespace Employee_protal.Service
                 UserId = e.UserId,
                 UserName = e.User?.Username ?? "Unknown",
                 Contact = e.Contact,
+                Salary = e.Salary,
                 DateofBirth = e.DateofBirth,
                 DepartmentId = e.DepartmentId,
                 DepartmentName = e.Department?.DepartmentName ?? "Unknown",
@@ -130,7 +134,7 @@ namespace Employee_protal.Service
         {
             var existing = await _repo.GetByIdAsync(dto.Id);
             if (existing == null) return null;
-
+            
             existing.FirstName = dto.FirstName;
             existing.LastName = dto.LastName;
             //existing.Email = dto.Email;
@@ -139,6 +143,7 @@ namespace Employee_protal.Service
             existing.Gender = dto.Gender;
             existing.UserId = dto.UserId;
             existing.Contact = dto.Contact;
+            existing.Salary = dto.Salary;
             existing.DateofBirth = dto.DateofBirth;
             existing.DepartmentId = dto.DepartmentId;
             existing.JoiningDate = dto.JoiningDate;
