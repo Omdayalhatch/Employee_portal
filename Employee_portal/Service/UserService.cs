@@ -29,44 +29,40 @@ namespace Employee_portal.Service
                 var user = await _repo
                 .GetUserByEmailAsync(dto.Email);
 
-            if (user == null)
-            {
+            if (user == null || user.PasswordHash != dto.Password)
+            
                 return null;
-            }
+            
 
-            var response = new LoginResponseDTO
+            return new LoginResponseDTO
             {
                 Email = dto.Email,
+                RoleId = user.RoleId,
+                RoleName = user.Role.RoleName,
                 Token = "JWT Token Here"
             };
 
-            return response;
         }
-            public async Task<RegisterDTO> RegisterAsync(RegisterDTO dto)
+        public async Task<LoginResponseDTO> RegisterAsync(RegisterDTO dto)
         {
             var user = new User
             {
                 Username = dto.UserName,
                 Email = dto.Email,
                 PasswordHash = dto.Password,
-                RoleId = 2
+                RoleId = dto.RoleId
             };
 
-            try
-            {
-                await _repo.AddUserAsync(user);
-                await _repo.SaveAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            await _repo.AddUserAsync(user);
+            await _repo.SaveAsync();
 
-            return dto;
+            return new LoginResponseDTO
+            {
+                Email = user.Email,
+                RoleId = user.RoleId,
+                RoleName = "User",
+                Token = "JWT Token Here"
+            };
         }
-
-        
-
     }
 }

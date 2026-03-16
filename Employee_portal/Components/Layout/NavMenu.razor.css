@@ -1,86 +1,66 @@
-.navbar-toggler {
-    appearance: none;
-    cursor: pointer;
-    width: 3.5rem;
-    height: 2.5rem;
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: linear-gradient(180deg,#5b54d6,#4b43c7);
     color: white;
-    position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 6px;
-    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.5rem rgba(255,255,255,0.1);
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
 }
 
-    .navbar-toggler:checked {
-        background-color: rgba(255,255,255,0.3);
-    }
 
-.top-row {
-    min-height: 3.5rem;
-    background-color: #1e293b;
-}
-
-.navbar-brand {
-    font-size: 1.2rem;
-    color: white;
-}
-
-.nav-item {
-    font-size: 0.95rem;
-    padding-bottom: 0.4rem;
-}
-
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
-
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
-
-.nav-link {
-    color: #cbd5e1;
-    border-radius: 6px;
-    height: 3rem;
+.logo {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding-left: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 15px;
 }
 
-    .nav-link:hover {
-        background-color: rgba(255,255,255,0.1);
-        color: white;
+.logo-icon {
+    background: #ff7a59;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+
+.menu {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.menu-title {
+    font-size: 12px;
+    opacity: 0.7;
+    margin: 15px 10px 5px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #e6e6ff;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+
+    .menu-item:hover {
+        background: rgba(255,255,255,0.1);
     }
 
-    .nav-link.active {
-        background-color: #2563eb;
-        color: white !important;
+
+    .menu-item.active {
+        background: white;
+        color: #4b43c7;
+        font-weight: 600;
     }
 
-.nav-scrollable {
-    display: none;
-    background: #0f172a;
-}
-
-.navbar-toggler:checked ~ .nav-scrollable {
-    display: block;
-}
-
-.bi {
-    font-size: 18px;
-}
-
-@media (min-width:641px) {
-
-    .navbar-toggler {
-        display: none;
+    .nav-text {
+        color: black;
     }
-
-    .nav-scrollable {
-        display: block;
-        height: calc(100vh - 3.5rem);
-        overflow-y: auto;
-    }
-}

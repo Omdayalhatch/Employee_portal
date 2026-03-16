@@ -7,82 +7,83 @@
 
 <div class="container-fluid mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">
-            <i class="bi bi-people"></i> Employee Management
-        </h3>
+    <div class="card shadow-sm">
 
-        <button class="btn btn-success"
-                @onclick="AddEmployee">
-            <i class="bi bi-plus-circle"></i> Add Employee
-        </button>
-    </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
 
-    @if (employees == null || employees.Count == 0)
-    {
-        <div class="card shadow-sm text-center p-5">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-people"></i> Employee Management
+            </h5>
 
-            <i class="bi bi-people display-4 text-secondary"></i>
+            <div class="d-flex gap-2">
 
-            <h4 class="mt-3">No Employee Found</h4>
+                <input class="form-control"
+                       style="width:250px"
+                       placeholder="Search employee..."
+                       @bind="searchText" />
 
-            <p class="text-muted">
-                Start by adding your first employee to the system.
-            </p>
+                <button class="btn btn-success"
+                        @onclick="AddEmployee">
+                    <i class="bi bi-plus-circle"></i> Add
+                </button>
 
-            <button class="btn btn-primary mt-2"
-                    @onclick="AddEmployee">
-                Add First Employee
-            </button>
+            </div>
 
         </div>
-    }
-    else
-    {
-        <div class="card shadow-sm">
 
-            <div class="card-body">
+        <div class="card-body p-0">
 
-                <table class="table table-hover align-middle text-center">
+            <div class="table-responsive">
 
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Profile</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr class="text-center">
+                            <th>ID</th>
+                            <th class="text-start">Employee</th>
                             <th>Department</th>
-                            <th>Date Of Birth</th>
+                            <th>DOB</th>
                             <th>Gender</th>
-                            <th style="width:170px">Actions</th>
+                            <th style="width:140px">Actions</th>
                         </tr>
+
                     </thead>
 
                     <tbody>
 
-                        @foreach (var employee in employees)
+                        @foreach (var employee in FilterEmployees())
                         {
-                            <tr>
+                            <tr class="text-center">
 
-                                <td>
-                                    @if (!string.IsNullOrEmpty(employee.Profile))
-                                    {
-                                        <img src="@employee.Profile"
-                                             style="height:60px;width:60px;border-radius:50%;object-fit:cover;" />
-                                    }
-                                    else
-                                    {
-                                        <i class="bi bi-person-circle fs-3 text-secondary"></i>
-                                    }
+                                <td>@employee.Id</td>
+
+                                <td class="text-start">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        @if (!string.IsNullOrEmpty(employee.Profile))
+                                        {
+                                            <img src="@employee.Profile"
+                                                 class="emp-img" />
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                                        }
+
+                                        <div>
+                                            <div class="fw-semibold">
+                                                @employee.FirstName @employee.LastName
+                                            </div>
+                                        </div>
+
+                                    </div>
+
                                 </td>
 
-                                <td class="fw-semibold">@employee.FirstName</td>
-
-                                <td>@employee.LastName</td>
-
                                 <td>
-                                    <span class="badge bg-info text-dark">
                                         @employee.DepartmentName
-                                    </span>
                                 </td>
 
                                 <td>
@@ -90,14 +91,12 @@
                                 </td>
 
                                 <td>
-                                    <span class="badge bg-success">
                                         @employee.Gender
-                                    </span>
                                 </td>
 
                                 <td>
 
-                                    <button class="btn btn-sm btn-warning me-2"
+                                    <button class="btn btn-sm btn-warning me-1"
                                             @onclick="@(() => Edit(employee.Id))">
                                         <i class="bi bi-pencil"></i>
                                     </button>
@@ -119,18 +118,51 @@
             </div>
 
         </div>
-    }
+
+    </div>
 
 </div>
 
+<style>
+
+    .emp-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #eee;
+    }
+
+    table tbody tr:hover {
+        background: #f8f9ff;
+        transition: .2s;
+    }
+
+    .card-header {
+        background: white;
+    }
+
+</style>
 
 @code {
 
     private List<EmployeeDTO> employees = new();
+    private string searchText = "";
 
     protected override async Task OnInitializedAsync()
     {
         employees = (await EmployeeService.GetAllAsync()).ToList();
+    }
+
+    IEnumerable<EmployeeDTO> FilterEmployees()
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+            return employees;
+
+        return employees.Where(e =>
+            e.FirstName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+            e.LastName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+            e.DepartmentName.Contains(searchText, StringComparison.OrdinalIgnoreCase));
     }
 
     void AddEmployee()

@@ -13,6 +13,6 @@ namespace EmployeeProtal.Application.Interface.IService
     {
         Task<List<UserDTO>> GetAllUsersAsync();
         Task<LoginResponseDTO> LoginAsync(LoginDTO dto);
-        Task<RegisterDTO> RegisterAsync(RegisterDTO dto);
+        Task<LoginResponseDTO> RegisterAsync(RegisterDTO dto);
     }
 }

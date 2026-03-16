@@ -31,6 +31,7 @@ namespace EmployeePortal.Infrastucture.Repository
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _context.Users
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
 

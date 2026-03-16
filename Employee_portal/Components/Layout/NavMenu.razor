@@ -1,98 +1,60 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="/dashboard">
-            <i class="bi bi-building"></i> Employee Portal
-        </a>
+﻿<div class="sidebar">
+
+    <div class="logo">
+        <span class="logo-icon">E</span>
+        <span class="logo-text">Employee Portal</span>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <nav class="menu flex-column">
 
-<div class="nav-scrollable"
-     onclick="document.querySelector('.navbar-toggler').click()">
-
-    <nav class="nav flex-column">
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Dashboard"
-                     Match="NavLinkMatch.All">
-
+        <div class="menu-section">
+            <p class="menu-title">MAIN</p>
+            <div class="nav-item">
+            <NavLink class="menu-item" href="/Dashboard" Match="NavLinkMatch.All">
                 <i class="bi bi-speedometer2"></i>
-                Dashboard
-
+                    <span class="nav-text">Dashboard</span>
             </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Employee">
-
+            </div>
+            <div class="nav-item">
+            <NavLink class="menu-item" href="/Employee">
                 <i class="bi bi-people"></i>
-                Employees
-
+                <span class="nav-text">Employees</span>
             </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Department">
-
+            </div>
+            <div class="nav-item">
+            <NavLink class="menu-item" href="/Department">
                 <i class="bi bi-building"></i>
-                Departments
-
+                    <span class="nav-text">Departments</span>
             </NavLink>
+            </div>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Users">
-
-                <i class="bi bi-person-badge"></i>
-                Users
-
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Attendance">
-
+        <div class="menu-section">
+            <p class="menu-title">MANAGEMENT</p>
+            <div class="nav-item">
+            <NavLink class="menu-item" href="/Attendance">
                 <i class="bi bi-calendar-check"></i>
-                Attendance
-
+                    <span class="nav-text">Attendance</span>
             </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Leave">
-
-                <i class="bi bi-calendar-x"></i>
-                Leave Requests
-
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"
-                     href="/Salary">
-
+            </div>
+            <div class="nav-item">
+            <NavLink class="menu-item" href="/Salary">
                 <i class="bi bi-cash-stack"></i>
-                Salary
-
+                    <span class="nav-text">Salary</span>
             </NavLink>
+            </div>
+
+            <NavLink class="menu-item" href="/User">
+                <i class="bi bi-person"></i>
+                <span class="nav-text">Users</span>
+            </NavLink>
+
         </div>
 
-        <hr />
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link text-danger"
-                     href="/">
-
+        <div class="logout">
+            <NavLink class="menu-item logout-btn" href="/">
                 <i class="bi bi-box-arrow-right"></i>
-                Logout
-
+                <span>Logout</span>
             </NavLink>
         </div>
 
