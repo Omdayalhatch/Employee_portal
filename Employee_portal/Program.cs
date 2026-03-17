@@ -29,8 +29,11 @@ namespace Employee_portal
             
             builder.Services.AddDbContext<AppDbContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("dbcs")));
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<JwtService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IDesignationService, DesignationService>();
+            builder.Services.AddScoped<IDesignationRepository, DesignationRepository>();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

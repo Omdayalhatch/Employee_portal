@@ -1,0 +1,148 @@
+﻿@page "/Designation/Edit/{Id:int}"
+@using EmployeePortal.Application.DTO
+@using EmployeePortal.Application.Interface.IService
+@using EmployeeProtal.Application.DTO
+@inject IDesignationService DesignationService
+@inject IDepartmentService DepartmentService
+@inject NavigationManager Nav
+
+<div class="container mt-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">✏️ Edit Designation</h5>
+        </div>
+
+        <div class="card-body">
+
+            @if (isLoading)
+            {
+                <div class="text-center p-5">
+                    <div class="spinner-border text-primary"></div>
+                    <p>Loading designation...</p>
+                </div>
+            }
+            else
+            {
+                <EditForm Model="model" OnValidSubmit="Update">
+
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Designation Name</label>
+
+                            <InputText class="form-control"
+                                       @bind-Value="model.DesignationName" />
+
+                            <ValidationMessage For="@(() => model.DesignationName)" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Department</label>
+
+                            <InputSelect class="form-select"
+                                         @bind-Value="model.DepartmentId">
+
+                                <option value="0">Select Department</option>
+
+                                @foreach (var d in departments)
+                                {
+                                    <option value="@d.Id">@d.DepartmentName</option>
+                                }
+
+                            </InputSelect>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end">
+
+                        <button class="btn btn-success me-2 px-4"
+                                type="submit"
+                                disabled="@isSaving">
+
+                            @(isSaving ? "Updating..." : "Update")
+                        </button>
+
+                        <button class="btn btn-outline-secondary px-4"
+                                type="button"
+                                @onclick="Back">
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </EditForm>
+            }
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3">
+                    @errorMessage
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private DesignationDTO model = new();
+    private List<DepartmentDTO> departments = new();
+
+    private bool isLoading = true;
+    private bool isSaving = false;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            model = await DesignationService.GetByIdAsync(Id);
+
+            departments = (await DepartmentService.GetAllAsync())?.ToList() ?? new();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+
+        isLoading = false;
+    }
+
+    async Task Update()
+    {
+        try
+        {
+            isSaving = true;
+
+            await DesignationService.UpdateAsync(model);
+
+            Nav.NavigateTo("/Designation");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    void Back()
+    {
+        Nav.NavigateTo("/Designation");
+    }
+
+}

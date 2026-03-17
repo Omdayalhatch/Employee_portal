@@ -1,4 +1,4 @@
-﻿using Employee_Protal.Application.DTO;
+﻿
 using EmployeeProtal.Application.DTO;
 using EmployeeProtal.Application.Interface.IRepository;
 using EmployeeProtal.Application.Interface.IService;
@@ -8,10 +8,12 @@ namespace Employee_portal.Service
 {
     public class UserService: IUserService
     {
+        private readonly JwtService _jwt;
         private readonly IUserRepository _repo;
-        public UserService(IUserRepository repo)
+        public UserService(IUserRepository repo, JwtService jwt)
         {
             _repo = repo;
+            _jwt = jwt;
         }
 
         public async Task<List<UserDTO>> GetAllUsersAsync()
@@ -33,14 +35,14 @@ namespace Employee_portal.Service
             if (user == null || user.PasswordHash != dto.Password)
             
                 return null;
-            
+            var token = _jwt.GenerateToken(user);
 
             return new LoginResponseDTO
             {
                 Email = dto.Email,
                 RoleId = user.RoleId,
                 RoleName = user.Role.RoleName,
-                Token = "JWT Token Here"
+                Token = token
                 
             };
 
@@ -57,13 +59,13 @@ namespace Employee_portal.Service
 
             await _repo.AddUserAsync(user);
             await _repo.SaveAsync();
-
+            var token = _jwt.GenerateToken(user);
             return new LoginResponseDTO
             {
                 Email = user.Email,
                 RoleId = user.RoleId,
                 RoleName = "User",
-                Token = "JWT Token Here"
+                Token = token
             };
         }
     }

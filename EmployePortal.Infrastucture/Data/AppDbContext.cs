@@ -36,18 +36,33 @@ namespace EmployeePortal.Infrastucture.Data
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Department)
                 .WithMany(d => d.Employees)
-                .HasForeignKey(e => e.DepartmentId);
+                .HasForeignKey(e => e.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Designation)
+                .WithMany(d => d.Employees)
+                .HasForeignKey(e => e.DesignationId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Designation>()
+                .HasOne(d => d.Department)
+                .WithMany(dep => dep.Designations)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.User)
                 .WithOne()
-                .HasForeignKey<Employee>(e => e.UserId);
+                .HasForeignKey<Employee>(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.RoleId);
-
+            modelBuilder.Entity<Employee>()
+    .HasOne(e => e.User)
+    .WithMany()
+    .HasForeignKey(e => e.UserId)
+    .IsRequired(false)
+    .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

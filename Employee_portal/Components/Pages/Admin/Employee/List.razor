@@ -1,203 +1,172 @@
 ﻿@page "/Employee"
+
 @using EmployeeProtal.Application.DTO
 @using EmployeeProtal.Application.Interface.IService
+
 @inject IEmployeeService EmployeeService
 @inject NavigationManager Nav
 @inject IJSRuntime JS
 
 <div class="container-fluid mt-4">
 
-    <div class="card shadow-sm">
-
-        <div class="card-header d-flex justify-content-between align-items-center">
-
-            <h5 class="fw-bold mb-0">
-                <i class="bi bi-people"></i> Employee Management
-            </h5>
-
-            <div class="d-flex gap-2">
-
-                <input class="form-control"
-                       style="width:250px"
-                       placeholder="Search employee..."
-                       @bind="searchText" />
-
-                <button class="btn btn-success"
-                        @onclick="AddEmployee">
-                    <i class="bi bi-plus-circle"></i> Add
-                </button>
-
-            </div>
-
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold">👥 Employee Management</h4>
+        <div class="d-flex gap-2">
+            <input class="form-control" style="width:250px" placeholder="Search employee..." @bind="searchText" />
+            <button class="btn btn-primary" @onclick="AddEmployee">➕ Add Employee</button>
         </div>
-
-        <div class="card-body p-0">
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0">
-
-                    <thead class="table-light">
-
-                        <tr class="text-center">
-                            <th>EmployeeCode</th>
-                            <th class="text-start">Employee</th>
-                            <th>Department</th>
-                            <th>DOB</th>
-                            <th>Gender</th>
-                            <th>Salary</th>
-
-                            <th style="width:140px">Actions</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (var employee in FilterEmployees())
-                        {
-                            <tr class="text-center">
-
-                                <td>@employee.Id</td>
-
-                                <td class="text-start">
-
-                                    <div class="d-flex align-items-center gap-2">
-
-                                        @if (!string.IsNullOrEmpty(employee.Profile))
-                                        {
-                                            <img src="@employee.Profile"
-                                                 class="emp-img" />
-                                        }
-                                        else
-                                        {
-                                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
-                                        }
-
-                                        <div>
-                                            <div class="fw-semibold">
-                                                @employee.FirstName @employee.LastName
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-                                        @employee.DepartmentName
-                                </td>
-
-                                <td>
-                                    @employee.DateofBirth.ToString("dd MMM yyyy")
-                                </td>
-
-                                <td>
-                                        @employee.Gender
-                                </td>
-                                <td>
-                                    @employee.Salary
-                                </td>
-
-                                <td>
-
-                                    <button class="btn btn-sm btn-warning me-1"
-                                            @onclick="@(() => Edit(employee.Id))">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-
-                                    <button class="btn btn-sm btn-danger"
-                                            @onclick="@(() => Delete(employee.Id))">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
     </div>
 
+    <div class="card shadow-sm rounded-4">
+        <div class="card-body p-0">
+            @if (isLoading)
+            {
+                <div class="text-center p-5">
+                    <div class="spinner-border text-primary"></div>
+                    <p class="mt-2">Loading employees...</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle mb-0">
+                        <thead class="table-light">
+                            <tr class="text-center">
+                                <th>ID</th>
+                                <th class="text-start">Employee</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>DOB</th>
+                                <th>Gender</th>
+                                <th>Status</th>
+                                <th style="width:150px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!FilteredEmployees.Any())
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">
+                                        🚫 No employees found
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var employee in FilteredEmployees)
+                                {
+                                    <tr class="text-center">
+                                        <td>@employee.Id</td>
+                                        <td class="text-start">
+                                            <div class="d-flex align-items-center gap-2">
+                                                @if (!string.IsNullOrEmpty(employee.Profile))
+                                                {
+                                                    <img src="@employee.Profile" class="emp-img" />
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                                                }
+                                                <div>
+                                                    <div >@employee.FirstName @employee.LastName</div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@employee.DepartmentName</td>
+                                        <td>@employee.DesignationName</td>
+                                        <td>@employee.DateofBirth.ToString("dd MMM yyyy")</td>
+                                        <td>@employee.Gender</td>
+                                        
+                                        <td>
+                                            <span class="badge bg-success">Active</span>
+                                        </td>
+                                       
+                                        <td>
+                                            <button class="btn btn-sm btn-warning me-1" title="Edit"
+                                                    @onclick="@(() => Edit(employee.Id))">
+                                                ✏️
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" title="Delete"
+                                                    @onclick="@(() => Delete(employee.Id))">
+                                                🗑️
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 <style>
-
     .emp-img {
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #eee;
     }
 
     table tbody tr:hover {
-        background: #f8f9ff;
-        transition: .2s;
+        background: #f4f6ff;
+        transition: 0.2s;
     }
 
-    .card-header {
-        background: white;
+    .badge {
+        padding: 0.5em 0.75em;
+        font-size: 0.85rem;
     }
-
 </style>
 
 @code {
-
     private List<EmployeeDTO> employees = new();
     private string searchText = "";
+    private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
         employees = (await EmployeeService.GetAllAsync()).ToList();
+        isLoading = false;
     }
 
-    IEnumerable<EmployeeDTO> FilterEmployees()
-    {
-        if (string.IsNullOrWhiteSpace(searchText))
-            return employees;
+    IEnumerable<EmployeeDTO> FilteredEmployees =>
+        string.IsNullOrWhiteSpace(searchText)
+        ? employees
+        : employees.Where(e =>
+            (e.FirstName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+            (e.LastName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+            (e.DepartmentName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+            (e.DesignationName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) 
+           
+        );
 
-        return employees.Where(e =>
-            e.FirstName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            e.LastName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            e.DepartmentName.Contains(searchText, StringComparison.OrdinalIgnoreCase));
-    }
-
-    void AddEmployee()
-    {
-        Nav.NavigateTo("/Employee/Create");
-    }
-
-    void Edit(int id)
-    {
-        Nav.NavigateTo($"/Employee/Edit/{id}");
-    }
+    void AddEmployee() => Nav.NavigateTo("/Employee/Create");
+    void Edit(int id) => Nav.NavigateTo($"/Employee/Edit/{id}");
 
     private async Task Delete(int id)
     {
-        var confirm = await JS.InvokeAsync<bool>("confirm",
-            "Are you sure you want to delete this employee?");
+        var confirm = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this employee?");
+        if (!confirm) return;
 
-        if (!confirm)
-            return;
-
-        var response = await EmployeeService.DeleteAsync(id);
-
-        if (!response)
+        var success = await EmployeeService.DeleteAsync(id);
+        if (!success)
         {
-            await JS.InvokeVoidAsync("alert",
-                "Employee cannot be deleted due to related records.");
+            await JS.InvokeVoidAsync("alert", "❌ Cannot delete. Employee has related records.");
             return;
         }
 
-        employees = (await EmployeeService.GetAllAsync()).ToList();
+        employees.RemoveAll(e => e.Id == id);
+        await JS.InvokeVoidAsync("alert", "✅ Employee deleted successfully");
     }
 
+    private void ToggleStatus(int id)
+    {
+        var emp = employees.FirstOrDefault(e => e.Id == id);
+        
+    }
 }

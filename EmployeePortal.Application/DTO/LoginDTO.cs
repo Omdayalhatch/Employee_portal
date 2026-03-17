@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace EmployeeProtal.Application.DTO
+public class LoginDTO
 {
-    public class LoginDTO
-    {
-        public string Username { get; set; } = "";
-        public string Password { get; set; } = "";
-        public string Email { get; set; } = "";
-    }
+    [Required(ErrorMessage = "Username or Email is required")]
+    public string Username { get; set; } = "";
+
+    [Required(ErrorMessage = "Password is required")]
+    public string Password { get; set; } = "";
+    [EmailAddress(ErrorMessage = "Invalid Email")]
+    public string Email { get; set; } = "";
 }

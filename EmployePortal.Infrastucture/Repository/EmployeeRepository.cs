@@ -52,6 +52,7 @@ namespace EmployeePortal.Infrastucture.Repository
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
             return await _context.Employees
+                .Include(e => e.Designation)
                 .Include(e => e.Department)
                 .Include(e => e.User)
                 .ToListAsync();
@@ -60,6 +61,7 @@ namespace EmployeePortal.Infrastucture.Repository
         public async Task<Employee?> GetByIdAsync(int id)
         {
             return await _context.Employees
+                .Include(e => e.Designation)
                 .Include(e => e.Department)
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(e => e.Id == id);
@@ -68,7 +70,7 @@ namespace EmployeePortal.Infrastucture.Repository
         public async Task<Employee?> GetDetailAsync(int id)
         {
             return await _context.Employees
-                .Include(e => e.DepartmentId)
+                .Include(e => e.Department)
                 .FirstOrDefaultAsync(b => b.Id == id);
         }
 

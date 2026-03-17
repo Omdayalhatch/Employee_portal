@@ -1,0 +1,83 @@
+﻿@page "/Designation/Create"
+
+@using EmployeePortal.Application.DTO
+@using EmployeePortal.Application.Interface.IService
+@using EmployeeProtal.Application.DTO
+@using EmployeeProtal.Application.Interface.IService
+
+@inject IDesignationService DesignationService
+@inject IDepartmentService DepartmentService
+@inject NavigationManager Nav
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h5>Add Designation</h5>
+        </div>
+
+        <div class="card-body">
+
+            <EditForm Model="model" OnValidSubmit="Save">
+
+                <DataAnnotationsValidator />
+
+                <div class="mb-3">
+                    <label>Designation Name</label>
+                    <InputText class="form-control"
+                               @bind-Value="model.DesignationName" />
+                    
+                </div>
+
+                <div class="mb-3">
+                    <label>Department</label>
+                    <InputSelect class="form-select"
+                                 @bind-Value="model.DepartmentId">
+
+                        <option value="">Select</option>
+
+                        @foreach (var d in departments)
+                        {
+                            <option value="@d.Id">@d.DepartmentName</option>
+                        }
+
+                    </InputSelect>
+                </div>
+
+                <button class="btn btn-success">Save</button>
+                <button class="btn btn-secondary ms-2"
+                        @onclick="Back">
+                    Cancel
+                </button>
+
+            </EditForm>
+
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    private DesignationDTO model = new();
+    private List<DepartmentDTO> departments = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        departments = (await DepartmentService.GetAllAsync()).ToList();
+    }
+
+    async Task Save()
+    {
+        await DesignationService.CreateAsync(model);
+        Nav.NavigateTo("/Designation");
+    }
+
+    void Back()
+    {
+        Nav.NavigateTo("/Designation");
+    }
+
+}

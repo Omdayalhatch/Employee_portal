@@ -1,4 +1,5 @@
-﻿using EmployeeProtal.Application.DTO;
+﻿using EmployeePortal.Domain.Entities;
+using EmployeeProtal.Application.DTO;
 using EmployeeProtal.Application.Interface.IRepository;
 using EmployeeProtal.Application.Interface.IService;
 using EmployeeProtal.Domain.Entities;
@@ -20,9 +21,9 @@ namespace Employee_protal.Service
 
             if (!departmentExists)
                 throw new Exception("Department not found");
-            var userUsed = await _repo.EmployeeUserExistsAsync(dto.UserId);
-            if (userUsed)
-                throw new Exception("This user is already assigned to another employee");
+            //var userUsed = await _repo.EmployeeUserExistsAsync(dto.UserId);
+            //if (userUsed)
+            //    throw new Exception("This user is already assigned to another employee");
 
             var employee = new Employee
             {
@@ -34,9 +35,10 @@ namespace Employee_protal.Service
                 Contact = dto.Contact,
                 Salary = dto.Salary,
                 DateofBirth = dto.DateofBirth,
+                DesignationId = dto.DesignationId,
                 DepartmentId = dto.DepartmentId,
                 JoiningDate = dto.JoiningDate,
-                UserId = dto.UserId
+                //UserId = dto.UserId
             };
 
             var result = await _repo.AddAsync(employee);
@@ -70,13 +72,15 @@ namespace Employee_protal.Service
                 Address = e.Address,
                 Profile = e.Profile,
                 Gender = e.Gender,
-                UserId = e.UserId,
+                //UserId = e.UserId,
                 Salary = e.Salary,
-                UserName = e.User?.Username ?? "Unknown",
+                UserName = e.User?.Username ?? "N/A",
                 Contact = e.Contact,
                 DateofBirth = e.DateofBirth,
+                DesignationId = e.DesignationId,
+                DesignationName = e.Designation?.DesignationName ?? "N/A",
                 DepartmentId = e.DepartmentId,
-                DepartmentName = e.Department?.DepartmentName ?? "Unknown",
+                DepartmentName = e.Department?.DepartmentName ?? "N/A",
                 JoiningDate = e.JoiningDate
             });
         }
@@ -94,13 +98,15 @@ namespace Employee_protal.Service
                 Address = e.Address,
                 Profile = e.Profile,
                 Gender = e.Gender,
-                UserId = e.UserId,
-                UserName = e.User?.Username ?? "Unknown",
+                //UserId = e.UserId,
+                UserName = e.User?.Username ?? "N/A",
                 Contact = e.Contact,
                 Salary = e.Salary,
                 DateofBirth = e.DateofBirth,
+                DesignationId = e.DesignationId,
+                DesignationName = e.Designation?.DesignationName ?? "N/A",
                 DepartmentId = e.DepartmentId,
-                DepartmentName = e.Department?.DepartmentName ?? "Unknown",
+                DepartmentName = e.Department?.DepartmentName ?? "N/A",
                 JoiningDate = e.JoiningDate
             };
 
@@ -119,13 +125,15 @@ namespace Employee_protal.Service
                 Address = e.Address,
                 Profile = e.Profile,
                 Gender = e.Gender,
-                UserId = e.UserId,
-                UserName = e.User?.Username ?? "Unknown",
+                //UserId = e.UserId,
+                UserName = e.User?.Username ?? "N/A",
                 Contact = e.Contact,
                 Salary = e.Salary,
                 DateofBirth = e.DateofBirth,
+                DesignationId = e.DesignationId,
+                DesignationName = e.Designation?.DesignationName ?? "N/A",
                 DepartmentId = e.DepartmentId,
-                DepartmentName = e.Department?.DepartmentName ?? "Unknown",
+                DepartmentName = e.Department?.DepartmentName ?? "N/A",
                 JoiningDate = e.JoiningDate
             };
         }
@@ -145,6 +153,7 @@ namespace Employee_protal.Service
             existing.Contact = dto.Contact;
             existing.Salary = dto.Salary;
             existing.DateofBirth = dto.DateofBirth;
+            existing.DesignationId = dto.DesignationId;
             existing.DepartmentId = dto.DepartmentId;
             existing.JoiningDate = dto.JoiningDate;
             await _repo.UpdateAsync(existing);

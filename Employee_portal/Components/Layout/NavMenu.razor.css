@@ -1,100 +1,87 @@
 .sidebar {
-    width: 200px;
+    width: 220px;
     height: 100vh;
-    background: linear-gradient(180deg, #4a8af9, #9c7fd9);
-    color: white;
-    padding: 20px 12px;
+    background: #0f172a;
+    color: #fff;
     display: flex;
     flex-direction: column;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    padding: 15px 10px;
+    position: sticky;
+    top: 0;
 }
-
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 22px;
-    font-weight: 700;
-    padding: 10px 15px;
-    margin-bottom: 10px;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
 }
 
 .logo-icon {
-    background: #ff7a59;
-    padding: 8px 12px;
+    background: #3b82f6;
+    padding: 10px;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 18px;
 }
 
-
+.logo-text {
+    font-size: 16px;
+    font-weight: 600;
+}
 
 .menu {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex: 1;
+}
+
+.menu-section {
+    margin-bottom: 20px;
 }
 
 .menu-title {
     font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    opacity: 0.6;
-    margin: 18px 12px 6px;
+    color: #94a3b8;
+    padding: 5px 12px;
 }
 
-
+.nav-item {
+    margin: 3px 0;
+}
 
 .menu-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 18px;
-    border-radius: 12px;
-    color: #e9e9ff;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #cbd5e1;
     text-decoration: none;
-    font-size: 15px;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
 }
-
-
-
-    .menu-item:hover {
-        background: rgba(255,255,255,0.15);
-        transform: translateX(5px);
-    }
-
-
-
-    .menu-item.active {
-        background: white;
-        color: #4c3fd9;
-        font-weight: 600;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-
 
     .menu-item i {
         font-size: 18px;
     }
 
+    .menu-item:hover {
+        background: #1e293b;
+        color: #fff;
+    }
+
+    .menu-item.active {
+        background: #3b82f6;
+        color: #fff;
+    }
+
 .logout {
     margin-top: auto;
-    padding: 10px;
 }
 
 .logout-btn {
-    background: rgba(255,255,255,0.1);
+    color: #f87171;
 }
 
     .logout-btn:hover {
-        background: #ff4d4f;
+        background: #7f1d1d;
         color: white;
     }
-
-    .nev-text{
-    color:  black;
-}

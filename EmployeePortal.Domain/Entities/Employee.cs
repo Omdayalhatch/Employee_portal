@@ -18,12 +18,14 @@ namespace EmployeeProtal.Domain.Entities
         public DateTime DateofBirth { get; set; }
         public string Address { get; set; } = "";
         public int DepartmentId { get; set; }
+        public int DesignationId { get; set; }
+        public Designation? Designation { get; set; }
         public Department? Department { get; set; }
         public decimal Salary { get; set; }
         public DateTime JoiningDate { get; set; } = DateTime.Now;
         public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
         public ICollection<LeaveRequest> LeaveRequests { get; set; } = new List<LeaveRequest>();
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public User? User { get; set; }
     }
 }
