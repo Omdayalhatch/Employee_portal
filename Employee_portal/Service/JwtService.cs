@@ -22,7 +22,7 @@ namespace Employee_portal.Service
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
                 new Claim(ClaimTypes.Name, user.Username ?? ""),
                 new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim(ClaimTypes.Role, user.Role.RoleName)
+                //new Claim(ClaimTypes.Role, user.Role.RoleName)
             };
 
             var key = new SymmetricSecurityKey(

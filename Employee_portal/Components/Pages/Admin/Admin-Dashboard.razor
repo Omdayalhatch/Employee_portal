@@ -36,8 +36,8 @@
         <div class="stat-card purple">
             <i class="bi bi-person-badge"></i>
             <div>
-                <h5>Total Users</h5>
-                <h2>@totalUsers</h2>
+                <h5>Total Designations</h5>
+                <h2>@totalDesignations</h2>
             </div>
         </div>
 
@@ -204,7 +204,7 @@
 
     int totalEmployees;
     int totalDepartments;
-    int totalUsers;
+    int totalDesignations;
     int totalLeaves;
 
     List<EmployeeProtal.Domain.Entities.Employee> recentEmployees = new();
@@ -215,7 +215,7 @@
 
         totalEmployees = await Db.Employees.CountAsync();
         totalDepartments = await Db.Departments.CountAsync();
-        totalUsers = await Db.Users.CountAsync();
+        totalDesignations = await Db.Designations.CountAsync();
         totalLeaves = await Db.LeaveRequests.CountAsync();
 
         recentEmployees = await Db.Employees

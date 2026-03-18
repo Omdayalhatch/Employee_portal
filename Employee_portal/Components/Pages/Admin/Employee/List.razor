@@ -1,24 +1,42 @@
 ﻿@page "/Employee"
-
 @using EmployeeProtal.Application.DTO
 @using EmployeeProtal.Application.Interface.IService
-
 @inject IEmployeeService EmployeeService
 @inject NavigationManager Nav
 @inject IJSRuntime JS
 
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-3">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-bold">👥 Employee Management</h4>
-        <div class="d-flex gap-2">
-            <input class="form-control" style="width:250px" placeholder="Search employee..." @bind="searchText" />
-            <button class="btn btn-primary" @onclick="AddEmployee">➕ Add Employee</button>
+    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+
+        <h4 class="fw-bold m-0">👥 Employee Management</h4>
+
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+
+            <input class="form-control"
+                   style="width: 220px; height: 38px;"
+                   placeholder="Search employee..."
+                   value="@searchText"
+                   @oninput="OnSearchChanged" />
+
+            <button class="btn btn-primary"
+                    style="height: 38px;"
+                    @onclick="AddEmployee">
+                ➕ Add
+            </button>
+
+            <button class="btn btn-success"
+                    style="height: 38px;"
+                    @onclick="DownloadReport">
+                ⬇ Export
+            </button>
+
         </div>
     </div>
 
-    <div class="card shadow-sm rounded-4">
-        <div class="card-body p-0">
+    <div class="card shadow rounded-4">
+        <div class="card-body p-0 " >
+
             @if (isLoading)
             {
                 <div class="text-center p-5">
@@ -29,75 +47,100 @@
             else
             {
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
-                            <tr class="text-center">
-                                <th>ID</th>
-                                <th class="text-start">Employee</th>
+                            <tr>
+                                <th>Employee-ID</th>
+                                <th>Employee</th>
                                 <th>Department</th>
                                 <th>Designation</th>
                                 <th>DOB</th>
                                 <th>Gender</th>
-                                <th>Status</th>
-                                <th style="width:150px">Actions</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (!FilteredEmployees.Any())
+
+                            @if (!PagedEmployees.Any())
                             {
                                 <tr>
-                                    <td colspan="8" class="text-center text-muted py-4">
-                                        🚫 No employees found
+                                    <td colspan="7" class="text-center text-muted py-4">
+                                        🚫 No data found
                                     </td>
                                 </tr>
                             }
                             else
                             {
-                                @foreach (var employee in FilteredEmployees)
+                                @foreach (var emp in PagedEmployees)
                                 {
-                                    <tr class="text-center">
-                                        <td>@employee.Id</td>
-                                        <td class="text-start">
+                                    
+                                    <tr>
+                                        <td>@emp.Id</td>
+
+                                        <td>
                                             <div class="d-flex align-items-center gap-2">
-                                                @if (!string.IsNullOrEmpty(employee.Profile))
+                                                @if (!string.IsNullOrEmpty(emp.Profile))
                                                 {
-                                                    <img src="@employee.Profile" class="emp-img" />
+                                                    <img src="@emp.Profile" class="emp-img" />
                                                 }
                                                 else
                                                 {
                                                     <i class="bi bi-person-circle fs-3 text-secondary"></i>
                                                 }
+
                                                 <div>
-                                                    <div >@employee.FirstName @employee.LastName</div>
-                                                    
+                                                    <div>@emp.FirstName @emp.LastName</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>@employee.DepartmentName</td>
-                                        <td>@employee.DesignationName</td>
-                                        <td>@employee.DateofBirth.ToString("dd MMM yyyy")</td>
-                                        <td>@employee.Gender</td>
-                                        
+
+                                        <td>@emp.DepartmentName</td>
+                                        <td>@emp.DesignationName</td>
+                                        <td>@emp.DateofBirth.ToString("dd MMM yyyy")</td>
+                                        <td>@emp.Gender</td>
+
                                         <td>
-                                            <span class="badge bg-success">Active</span>
-                                        </td>
-                                       
-                                        <td>
-                                            <button class="btn btn-sm btn-warning me-1" title="Edit"
-                                                    @onclick="@(() => Edit(employee.Id))">
-                                                ✏️
-                                            </button>
-                                            <button class="btn btn-sm btn-danger" title="Delete"
-                                                    @onclick="@(() => Delete(employee.Id))">
-                                                🗑️
-                                            </button>
+                                            <button class="btn btn-sm btn-warning me-1" @onclick="() => Edit(emp.Id)">✏</button>
+                                            <button class="btn btn-sm btn-danger" @onclick="() => ConfirmDelete(emp.Id)">🗑</button>
                                         </td>
                                     </tr>
+                        
                                 }
                             }
                         </tbody>
                     </table>
                 </div>
+
+                @if (TotalPages > 1)
+{
+    <div class="d-flex justify-content-between align-items-center p-3 flex-wrap gap-2">
+
+        <small>Page @currentPage of @TotalPages</small>
+
+        <div class="d-flex flex-wrap gap-1">
+
+            <button class="btn btn-sm btn-outline-primary"
+                    disabled="@(currentPage == 1)"
+                    @onclick="() => ChangePage(currentPage - 1)">
+                Prev
+            </button>
+            @foreach (var page in GetVisiblePages())
+            {
+                <button class="btn btn-sm @(page == currentPage ? "btn-primary" : "btn-outline-primary")"
+                        @onclick="() => ChangePage(page)">
+                    @(page) 
+                </button>
+            }
+
+            <button class="btn btn-sm btn-outline-primary"
+                    disabled="@(currentPage == TotalPages)"
+                    @onclick="() => ChangePage(currentPage + 1)">
+                Next
+            </button>
+
+        </div>
+    </div>
+}
             }
         </div>
     </div>
@@ -105,68 +148,127 @@
 
 <style>
     .emp-img {
-        width: 42px;
-        height: 42px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #eee;
+        border: 2px solid #ddd;
     }
-
     table tbody tr:hover {
-        background: #f4f6ff;
-        transition: 0.2s;
-    }
-
-    .badge {
-        padding: 0.5em 0.75em;
-        font-size: 0.85rem;
-    }
+        background: #f5f7ff;
+         transition: 0.2s; 
+    }    
 </style>
 
 @code {
     private List<EmployeeDTO> employees = new();
+    private List<EmployeeDTO> filteredList = new();
+
     private string searchText = "";
     private bool isLoading = true;
+
+    private int currentPage = 1;
+    private int pageSize = 7;
 
     protected override async Task OnInitializedAsync()
     {
         employees = (await EmployeeService.GetAllAsync()).ToList();
+        filteredList = employees;
         isLoading = false;
     }
 
-    IEnumerable<EmployeeDTO> FilteredEmployees =>
-        string.IsNullOrWhiteSpace(searchText)
-        ? employees
-        : employees.Where(e =>
-            (e.FirstName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            (e.LastName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            (e.DepartmentName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            (e.DesignationName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) 
-           
-        );
+    private int TotalPages => (int)Math.Ceiling((double)filteredList.Count / pageSize);
 
-    void AddEmployee() => Nav.NavigateTo("/Employee/Create");
-    void Edit(int id) => Nav.NavigateTo($"/Employee/Edit/{id}");
+    IEnumerable<EmployeeDTO> PagedEmployees =>
+        filteredList
+        .Skip((currentPage - 1) * pageSize)
+        .Take(pageSize);
+
+    
+    private void ChangePage(int page)
+    {
+        if (page < 1 || page > TotalPages) return;
+
+        currentPage = page;
+        StateHasChanged(); 
+    }
+
+    private List<int> GetVisiblePages()
+    {
+        int maxPagesToShow = 5;
+
+        int start = Math.Max(1, currentPage - 2);
+        int end = Math.Min(TotalPages, start + maxPagesToShow - 1);
+
+        if (end - start < maxPagesToShow)
+        {
+            start = Math.Max(1, end - maxPagesToShow + 1);
+        }
+
+        return Enumerable.Range(start, end - start + 1).ToList();
+    }
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        searchText = e.Value?.ToString() ?? "";
+
+        filteredList = string.IsNullOrWhiteSpace(searchText)
+            ? employees
+            : employees.Where(e =>
+                (e.FirstName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                (e.LastName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                (e.DepartmentName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                (e.DesignationName ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            ).ToList();
+
+        currentPage = 1;
+    }
+
+    private void AddEmployee()
+    {
+        Nav.NavigateTo("/Employee/Create");
+    }
+
+    private void Edit(int id)
+    {
+        Nav.NavigateTo($"/Employee/Edit/{id}");
+    }
+
+    private async Task ConfirmDelete(int id)
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", "Are you sure to delete?");
+        if (confirm)
+        {
+            await Delete(id);
+        }
+    }
 
     private async Task Delete(int id)
     {
-        var confirm = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this employee?");
-        if (!confirm) return;
+        await EmployeeService.DeleteAsync(id);
 
-        var success = await EmployeeService.DeleteAsync(id);
-        if (!success)
-        {
-            await JS.InvokeVoidAsync("alert", "❌ Cannot delete. Employee has related records.");
-            return;
-        }
+        employees = employees.Where(e => e.Id != id).ToList();
+        filteredList = filteredList.Where(e => e.Id != id).ToList();
 
-        employees.RemoveAll(e => e.Id == id);
-        await JS.InvokeVoidAsync("alert", "✅ Employee deleted successfully");
+        if (currentPage > TotalPages)
+            currentPage = TotalPages;
     }
 
-    private void ToggleStatus(int id)
+    private async Task DownloadReport()
     {
-        var emp = employees.FirstOrDefault(e => e.Id == id);
-        
+        var csv = new System.Text.StringBuilder();
+
+        csv.AppendLine("ID,Name,Department,Designation,DOB,Gender");
+
+        foreach (var emp in filteredList)
+        {
+            var dob = emp.DateofBirth.ToString("dd-MM-yyyy");
+
+            csv.AppendLine($"{emp.Id},\"{emp.FirstName} {emp.LastName}\",\"{emp.DepartmentName}\",\"{emp.DesignationName}\",\"{dob}\",\"{emp.Gender}\"");
+        }
+
+        var bytes = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        var base64 = Convert.ToBase64String(bytes);
+
+        await JS.InvokeVoidAsync("downloadFile", "Employees.csv", base64);
     }
 }

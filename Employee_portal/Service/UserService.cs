@@ -29,23 +29,23 @@ namespace Employee_portal.Service
 
         public async Task<LoginResponseDTO> LoginAsync(LoginDTO dto)
         {
-                var user = await _repo
-                .GetUserByEmailAsync(dto.Email);
+            var user = await _repo.GetUserByEmailAsync(dto.Email.Trim());
 
-            if (user == null || user.PasswordHash != dto.Password)
-            
+            if (user == null)
                 return null;
+
+            if (user.PasswordHash != dto.Password)
+                return null;
+
             var token = _jwt.GenerateToken(user);
 
             return new LoginResponseDTO
             {
-                Email = dto.Email,
+                Email = user.Email,
                 RoleId = user.RoleId,
-                RoleName = user.Role.RoleName,
+                RoleName = user.Role?.RoleName ?? "User",
                 Token = token
-                
             };
-
         }
         public async Task<LoginResponseDTO> RegisterAsync(RegisterDTO dto)
         {

@@ -5,11 +5,12 @@
 }
 
 .main {
-    flex: 100;
+    flex: 100%;
     display: flex;
+    margin-left: 220px;
     flex-direction: column;
+   
 }
-
 
 .top-navbar {
     height: 40px;
@@ -20,7 +21,6 @@
     align-items: center;
     padding: 0 20px;
 }
-
 
 .right {
     display: flex;
